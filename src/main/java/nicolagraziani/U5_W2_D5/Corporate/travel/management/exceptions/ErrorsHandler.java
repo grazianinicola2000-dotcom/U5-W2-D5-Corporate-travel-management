@@ -29,6 +29,7 @@ public class ErrorsHandler {
         return new ErrorsListDTO(ex.getMessage(), LocalDateTime.now(), ex.getErrors());
     }
 
+
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500
     public ErrorsDTO handleGenericEx(Exception ex) {

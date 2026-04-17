@@ -10,5 +10,5 @@ import java.util.UUID;
 
 @Repository
 public interface ReservationRepository extends JpaRepository<Reservation, UUID> {
-    boolean existsByEmployeeAndRequestDate(Employee employee, LocalDate requestDate);
+    boolean existsByEmployeeAndTravel_TravelDate(Employee employee, LocalDate travelDate);
 }

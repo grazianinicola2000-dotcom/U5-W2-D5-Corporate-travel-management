@@ -26,6 +26,7 @@ public class Travel {
     private LocalDate travelDate;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private TravelState state;
 
     public Travel(String destination, LocalDate travelDate, TravelState state) {
