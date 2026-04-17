@@ -3,6 +3,7 @@ package nicolagraziani.U5_W2_D5.Corporate.travel.management.controllers;
 import nicolagraziani.U5_W2_D5.Corporate.travel.management.entities.Travel;
 import nicolagraziani.U5_W2_D5.Corporate.travel.management.exceptions.ValidationException;
 import nicolagraziani.U5_W2_D5.Corporate.travel.management.payloads.TravelDTO;
+import nicolagraziani.U5_W2_D5.Corporate.travel.management.payloads.TravelStateDTO;
 import nicolagraziani.U5_W2_D5.Corporate.travel.management.services.TravelService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -62,5 +63,15 @@ public class TravelController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void findTravelByIdAndDelete(@PathVariable UUID travelId) {
         this.travelService.findTravelByIdAndDelete(travelId);
+    }
+
+    //    PATCH
+    @PatchMapping("/{travelId}/state")
+    public Travel findByIdAndChangeState(@PathVariable UUID travelId, @RequestBody @Validated TravelStateDTO body, BindingResult validation) {
+        if (validation.hasErrors()) {
+            List<String> errors = validation.getFieldErrors().stream().map(error -> error.getDefaultMessage()).toList();
+            throw new ValidationException(errors);
+        }
+        return this.travelService.findTravelByIdAndChangeState(travelId, body);
     }
 }

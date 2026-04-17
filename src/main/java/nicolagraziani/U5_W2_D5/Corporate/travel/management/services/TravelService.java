@@ -6,6 +6,7 @@ import nicolagraziani.U5_W2_D5.Corporate.travel.management.enums.TravelState;
 import nicolagraziani.U5_W2_D5.Corporate.travel.management.exceptions.NotFoundException;
 import nicolagraziani.U5_W2_D5.Corporate.travel.management.exceptions.ValidationException;
 import nicolagraziani.U5_W2_D5.Corporate.travel.management.payloads.TravelDTO;
+import nicolagraziani.U5_W2_D5.Corporate.travel.management.payloads.TravelStateDTO;
 import nicolagraziani.U5_W2_D5.Corporate.travel.management.repositories.TravelRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -75,5 +76,21 @@ public class TravelService {
         Travel found = this.findTravelById(travelId);
         this.travelRepository.delete(found);
         log.info("Il viaggio a {} nella data {} è stato eliminato correttamente", found.getDestination(), found.getTravelDate());
+    }
+
+    //    UPDTATE TRAVEL STATE
+    public Travel findTravelByIdAndChangeState(UUID travelId, TravelStateDTO body) {
+        Travel found = this.findTravelById(travelId);
+        String state = body.state();
+        TravelState stateEnum = null;
+        switch (state.toLowerCase()) {
+            case "programmed" -> stateEnum = TravelState.PROGRAMMED;
+            case "completed" -> stateEnum = TravelState.COMPLETED;
+            default -> throw new ValidationException("Valore stato non accettabile");
+        }
+        found.setState(stateEnum);
+        Travel saved = this.travelRepository.save(found);
+        log.info("Lo stato del viaggio a {} in nella data {} è stato modificato correttamente", found.getDestination(), found.getTravelDate());
+        return saved;
     }
 }
